@@ -10,6 +10,14 @@ import java.util.Set;
 @Entity
 @Table(name = "users")
 public class User {
+
+    // REVIEW: Sugerencias de mejora:
+    //  1. Agregar un campo 'isActive' para manejar usuarios activos/inactivos.
+    //  2. Considerar usar @Enumerated para el campo 'role' si se decide manejar roles como enum.
+    //  3. Implementar métodos equals() y hashCode() para comparaciones adecuadas.
+    //  4. Usar @CreatedDate y @LastModifiedDate de Spring Data para manejar automáticamente las fechas de creación y actualización.
+    //  5. Agregar validaciones con anotaciones de Jakarta Bean Validation (por ejemplo, @Email, @NotBlank, etc.).
+
     @Id
     @GeneratedValue
     private Long id;

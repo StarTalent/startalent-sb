@@ -11,6 +11,17 @@ import java.util.List;
 @Table(name = "account")
 public class Account {
 
+    // REVIEW: Sugerencias de mejora:
+    //  1. Agregar campos para fechas de creación y actualización (createdAt, updatedAt).
+    //  2. Considerar agregar un campo para el plan o tipo de cuenta (por ejemplo, 'accountType' o 'plan').
+    //  3. Agregar una relación con Job para manejar las vacantes asociadas a la cuenta.
+    //  4. Implementar métodos equals() y hashCode() para comparaciones adecuadas.
+    //  5. Agregar validaciones con anotaciones de Jakarta Bean Validation (por ejemplo, @NotBlank para 'name' y 'domain').
+    //  6. Considerar usar @JsonIgnore en la propiedad 'users' para evitar serialización circular en caso de usar la entidad en respuestas REST.
+    //  7. Considerar que al usar @Column(name = "isactive") se puede omitir el nombre de la columna si coincide con el nombre del atributo.
+    //      7.1. Un mejor acercamiento sería usar @Column(name = "is_active") para seguir la convención de nombres de columnas en snake_case.
+    //      7.2. El usar snake_case en los nombres de columnas es una buena práctica porque se lee mejor y es más fácil de entender.
+
     @Id
     @GeneratedValue
     private Long id;

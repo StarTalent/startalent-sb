@@ -9,6 +9,14 @@ import java.time.LocalDateTime;
 @Entity
 @Table(name = "users_role")
 public class UserRole {
+
+    // REVIEW: Sugerencias de mejora:
+    //  1. Considerar agregar una referencia a Account, ya que según el diagrama ER, las relaciones de usuario y rol podrían estar asociadas a una cuenta específica.
+    //  2. Agregar un campo 'isActive' para manejar roles activos/inactivos sin eliminar el registro.
+    //  3. Implementar métodos equals() y hashCode() para comparaciones adecuadas.
+    //  4. Agregar anotaciones @CreatedDate y @LastModifiedDate de Spring Data para manejar automáticamente las fechas de creación y actualización.
+    //  5. Agregar un método para buscar roles por user_id y role_id.
+
     @Id
     @GeneratedValue
     private Long id;

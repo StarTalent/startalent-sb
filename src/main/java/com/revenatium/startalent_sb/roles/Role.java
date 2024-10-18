@@ -6,7 +6,7 @@ import java.util.HashSet;
 import java.util.Set;
 
 @Entity
-@Table(name = "role")
+@Table(name = "role") // REVIEW: ¿Por qué no se usa el nombre 'roles'?
 public class Role {
     @Id
     @GeneratedValue

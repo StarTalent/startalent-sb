@@ -8,7 +8,7 @@ import jakarta.persistence.*;
 import java.util.List;
 
 @Entity
-@Table(name = "account")
+@Table(name = "account") // REVIEW: ¿Por qué no se usa el nombre 'accounts'?
 public class Account {
 
     // REVIEW: Sugerencias de mejora:

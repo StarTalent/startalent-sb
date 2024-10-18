@@ -7,7 +7,7 @@ import jakarta.persistence.*;
 import java.time.LocalDateTime;
 
 @Entity
-@Table(name = "users_role")
+@Table(name = "users_role") // REVIEW: ¿Por qué no se usa el nombre 'user_roles'?
 public class UserRole {
 
     // REVIEW: Sugerencias de mejora:

@@ -30,6 +30,7 @@
 		<java.version>21</java.version>
 	</properties>
 	<dependencies>
+    <!-- Dependencias de Spring Boot -->
 		<dependency>
 			<groupId>org.springframework.boot</groupId>
 			<artifactId>spring-boot-starter-actuator</artifactId>
@@ -43,6 +44,15 @@
 			<artifactId>spring-boot-starter-web</artifactId>
 		</dependency>
 
+    <!-- Dependencias externas del proyecto -->
+    <!-- https://mvnrepository.com/artifact/io.github.cdimascio/dotenv-java -->
+    <dependency>
+      <groupId>io.github.cdimascio</groupId>
+      <artifactId>dotenv-java</artifactId>
+      <version>3.0.2</version>
+    </dependency>
+
+    <!-- Dependencias de Base de Datos -->
 		<dependency>
 			<groupId>com.h2database</groupId>
 			<artifactId>h2</artifactId>
@@ -53,6 +63,8 @@
 			<artifactId>postgresql</artifactId>
 			<scope>runtime</scope>
 		</dependency>
+
+    <!-- Dependencias para las pruebas -->
 		<dependency>
 			<groupId>org.springframework.boot</groupId>
 			<artifactId>spring-boot-starter-test</artifactId>

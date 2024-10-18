@@ -1,0 +1,3 @@
+# Este archivo es necesario para que Spring Boot pueda cargar la clase que se encarga de cargar
+# las propiedades de los archivos de propiedades de la aplicación.
+org.springframework.boot.env.EnvironmentPostProcessor=com.revenatium.startalent_sb.config.EnvPropertySourceLoader

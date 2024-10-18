@@ -55,6 +55,22 @@ mvn clean install
 mvn spring-boot:run
 ```
 
+3. Se requiere tener un archivo .env en la raíz del proyecto con las siguientes variables:
+
+```properties
+DB_URL={url jdbc de la base de datos}
+DB_USERNAME={usuario de la base de datos}
+DB_PASSWORD={contraseña de la base de datos}
+```
+
+> Sin este archivo, la aplicación no podrá conectarse a la base de datos y no podrá iniciar correctamente.
+> 
+> Se puede usar el archivo `.env.example` como base para crear el archivo `.env`.
+> 
+> Se puede modificar el nivel de log de la aplicación a `DEBUG` en el archivo `application.properties`, para ver las 
+> propiedades cargadas desde el archivo `.env`. (*ej. `logging.level.com.revenatium.startalent_sb.
+> StartalentSbApplication=DEBUG`*)
+
 La aplicación estará disponible en `http://localhost:8080`.
 
 ## Estructura del Proyecto

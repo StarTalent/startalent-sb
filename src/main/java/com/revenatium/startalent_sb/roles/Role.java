@@ -2,6 +2,8 @@ package com.revenatium.startalent_sb.roles;
 
 import com.revenatium.startalent_sb.userRole.UserRole;
 import jakarta.persistence.*;
+import org.hibernate.annotations.BatchSize;
+
 import java.util.HashSet;
 import java.util.Set;
 
@@ -17,7 +19,8 @@ public class Role {
     @Column(name = "isactive")
     private boolean isActive;
 
-    @OneToMany(mappedBy = "role")
+    @BatchSize(size = 20)
+    @OneToMany(mappedBy = "role", fetch = FetchType.LAZY)
     private Set<UserRole> userRoles = new HashSet<>();
 
     public Role() {

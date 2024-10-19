@@ -37,7 +37,7 @@ public class Account {
     @Column(name = "isactive")
     private boolean isActive;
 
-    @OneToMany(mappedBy = "account")
+    @OneToMany(mappedBy = "account", fetch = FetchType.LAZY)
     private List<User> users;
 
     public Long getId() {

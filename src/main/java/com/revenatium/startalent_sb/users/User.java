@@ -3,6 +3,8 @@ package com.revenatium.startalent_sb.users;
 import com.revenatium.startalent_sb.accounts.Account;
 import com.revenatium.startalent_sb.userRole.UserRole;
 import jakarta.persistence.*;
+import org.hibernate.annotations.BatchSize;
+
 import java.time.LocalDateTime;
 import java.util.HashSet;
 import java.util.Set;
@@ -22,7 +24,7 @@ public class User {
     @GeneratedValue
     private Long id;
 
-    @ManyToOne
+    @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "account_id")
     private Account account;
 
@@ -43,7 +45,8 @@ public class User {
     @Column(name = "updatedat")
     private LocalDateTime updatedAt;
 
-    @OneToMany(mappedBy = "user")
+    @BatchSize(size = 20)
+    @OneToMany(mappedBy = "user", fetch = FetchType.LAZY)
     private Set<UserRole> userRoles = new HashSet<>();
 
     public User() {

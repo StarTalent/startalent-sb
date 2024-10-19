@@ -21,11 +21,11 @@ public class UserRole {
     @GeneratedValue
     private Long id;
 
-    @ManyToOne
+    @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "user_id", nullable = false)
     private User user;
 
-    @ManyToOne
+    @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "role_id", nullable = false)
     private Role role;
 
@@ -33,6 +33,11 @@ public class UserRole {
     private LocalDateTime assignedAt;
 
     public UserRole() {
+    }
+
+    public UserRole(User user, Role role) {
+        this.user = user;
+        this.role = role;
     }
 
     public UserRole(User user, Role role, LocalDateTime assignedAt) {

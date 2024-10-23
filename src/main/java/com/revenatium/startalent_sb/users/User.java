@@ -3,14 +3,21 @@ package com.revenatium.startalent_sb.users;
 import com.revenatium.startalent_sb.accounts.Account;
 import com.revenatium.startalent_sb.userRole.UserRole;
 import jakarta.persistence.*;
+import jakarta.validation.constraints.Email;
+import jakarta.validation.constraints.NotBlank;
 import org.hibernate.annotations.BatchSize;
+import org.springframework.data.annotation.CreatedDate;
+import org.springframework.data.annotation.LastModifiedDate;
+import org.springframework.data.jpa.domain.support.AuditingEntityListener;
 
 import java.time.LocalDateTime;
 import java.util.HashSet;
+import java.util.Objects;
 import java.util.Set;
 
 @Entity
 @Table(name = "users")
+@EntityListeners(AuditingEntityListener.class)
 public class User {
 
     // REVIEW: Sugerencias de mejora:
@@ -28,21 +35,33 @@ public class User {
     @JoinColumn(name = "account_id")
     private Account account;
 
+    @Column(nullable = false)
+    @NotBlank
+    @Email
     private String email;
 
-    @Column(name = "passwordhash")
+    @NotBlank
+    @Column(name = "password_hash")
     private String passwordHash;
 
-    @Column(name = "firstname")
+    @Column(name = "first_name")
+    @NotBlank
     private String firstName;
 
-    @Column(name = "lastname")
+    @NotBlank
+    @Column(name = "last_name")
     private String lastName;
 
-    @Column(name = "createdat")
+    @NotBlank
+    @Column(name = "is_active")
+    private boolean isActive;
+
+    @CreatedDate
+    @Column(name = "created_at")
     private LocalDateTime createdAt;
 
-    @Column(name = "updatedat")
+    @LastModifiedDate
+    @Column(name = "updated_at")
     private LocalDateTime updatedAt;
 
     @BatchSize(size = 20)
@@ -61,6 +80,21 @@ public class User {
         this.createdAt = LocalDateTime.now();
         this.updatedAt = LocalDateTime.now();
     }
+
+    @Override
+    public boolean equals(Object o) {
+        if (this == o) return true;
+        if (o == null || getClass() != o.getClass()) return false;
+        User user = (User) o;
+        return Objects.equals(id, user.id) &&
+                Objects.equals(email, user.email);
+    }
+
+    @Override
+    public int hashCode() {
+        return Objects.hash(id, email);
+    }
+
 
     public Long getId() {
         return id;

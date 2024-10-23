@@ -80,7 +80,7 @@ class UserRepositoryTests {
             role.setId(1L);
             role.setName("ADMIN");
 
-            UserRole userRole = new UserRole(user, role);
+            UserRole userRole = new UserRole(user, role, null, null);
             user.setUserRoles(Set.of(userRole));
 
             userRepository.save(user);

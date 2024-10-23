@@ -1,13 +1,19 @@
 package com.revenatium.startalent_sb.userRole;
 
+import com.revenatium.startalent_sb.accounts.Account;
 import com.revenatium.startalent_sb.roles.Role;
 import com.revenatium.startalent_sb.users.User;
 import jakarta.persistence.*;
+import org.springframework.data.annotation.CreatedDate;
+import org.springframework.data.annotation.LastModifiedDate;
+import org.springframework.data.jpa.domain.support.AuditingEntityListener;
 
 import java.time.LocalDateTime;
+import java.util.Objects;
 
 @Entity
-@Table(name = "users_role") // REVIEW: ¿Por qué no se usa el nombre 'user_roles'?
+@Table(name = "user_roles") // REVIEW: ¿Por qué no se usa el nombre 'user_roles'?
+@EntityListeners(AuditingEntityListener.class)
 public class UserRole {
 
     // REVIEW: Sugerencias de mejora:
@@ -29,21 +35,30 @@ public class UserRole {
     @JoinColumn(name = "role_id", nullable = false)
     private Role role;
 
-    @Column(name = "assigned_at")
+    @ManyToOne(fetch = FetchType.LAZY)
+    @JoinColumn(name = "account_id", nullable = false)
+    private Account account;
+
+    @CreatedDate
+    @Column(name = "assigned_at", updatable = false)
     private LocalDateTime assignedAt;
+
+    @LastModifiedDate
+    @Column(name = "updated_at")
+    private LocalDateTime updatedAt;
+
+    @Column(name = "is_active", nullable = false)
+    private boolean isActive;
 
     public UserRole() {
     }
 
-    public UserRole(User user, Role role) {
+    public UserRole(User user, Role role, Account account, LocalDateTime assignedAt) {
         this.user = user;
         this.role = role;
-    }
-
-    public UserRole(User user, Role role, LocalDateTime assignedAt) {
-        this.user = user;
-        this.role = role;
+        this.account = account;
         this.assignedAt = assignedAt;
+        this.isActive = true;
     }
 
     public Long getId() {
@@ -70,6 +85,14 @@ public class UserRole {
         this.role = role;
     }
 
+    public Account getAccount() {
+        return account;
+    }
+
+    public void setAccount(Account account) {
+        this.account = account;
+    }
+
     public LocalDateTime getAssignedAt() {
         return assignedAt;
     }
@@ -78,4 +101,34 @@ public class UserRole {
         this.assignedAt = assignedAt;
     }
 
+    public LocalDateTime getUpdatedAt() {
+        return updatedAt;
+    }
+
+    public void setUpdatedAt(LocalDateTime updatedAt) {
+        this.updatedAt = updatedAt;
+    }
+
+    public boolean isActive() {
+        return isActive;
+    }
+
+    public void setActive(boolean isActive) {
+        this.isActive = isActive;
+    }
+
+    @Override
+    public boolean equals(Object o) {
+        if (this == o) return true;
+        if (o == null || getClass() != o.getClass()) return false;
+        UserRole userRole = (UserRole) o;
+        return Objects.equals(user, userRole.user) &&
+                Objects.equals(role, userRole.role) &&
+                Objects.equals(account, userRole.account);
+    }
+
+    @Override
+    public int hashCode() {
+        return Objects.hash(user, role, account);
+    }
 }

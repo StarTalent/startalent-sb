@@ -9,6 +9,11 @@ import java.util.List;
 //  2. Agregar un método para buscar roles por account_id, ya que según el diagrama ER, los roles podrían estar asociados a una cuenta específica.
 //  3. Considerar agregar un método findByNameAndAccountId para buscar roles específicos de una cuenta.
 
-public interface RolRepository extends JpaRepository<Role, Long> {
-    List<Role>  findByName(String name);
+public interface RoleRepository extends JpaRepository<Role, Long> {
+
+    List<Role> findByName(String name);
+
+//    List<Role> findByAccountId(Long accountId);
+//
+//    List<Role> findByNameAndAccountId(String name, Long accountId);
 }

@@ -2,21 +2,25 @@ package com.revenatium.startalent_sb.roles;
 
 import com.revenatium.startalent_sb.userRole.UserRole;
 import jakarta.persistence.*;
+import jakarta.validation.constraints.NotBlank;
 import org.hibernate.annotations.BatchSize;
 
 import java.util.HashSet;
 import java.util.Set;
 
 @Entity
-@Table(name = "role") // REVIEW: ¿Por qué no se usa el nombre 'roles'?
+@Table(name = "roles") // REVIEW: ¿Por qué no se usa el nombre 'roles'?
 public class Role {
     @Id
     @GeneratedValue
     private Long id;
+
+    @NotBlank
     private String name;
+
     private String description;
 
-    @Column(name = "isactive")
+    @Column(name = "is_active")
     private boolean isActive;
 
     @BatchSize(size = 20)

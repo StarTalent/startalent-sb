@@ -13,7 +13,7 @@ public interface RoleRepository extends JpaRepository<Role, Long> {
 
     List<Role> findByName(String name);
 
-//    List<Role> findByAccountId(Long accountId);
-//
-//    List<Role> findByNameAndAccountId(String name, Long accountId);
+    List<Role> findByAccountId(Long accountId);
+
+    List<Role> findByNameAndAccountId(String name, Long accountId);
 }

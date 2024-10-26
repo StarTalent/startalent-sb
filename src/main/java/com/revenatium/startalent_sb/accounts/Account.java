@@ -2,6 +2,8 @@ package com.revenatium.startalent_sb.accounts;
 
 import com.fasterxml.jackson.annotation.JsonIgnore;
 import com.fasterxml.jackson.databind.JsonNode;
+import com.revenatium.startalent_sb.jobs.Job;
+import com.revenatium.startalent_sb.roles.Role;
 import com.revenatium.startalent_sb.users.User;
 import com.revenatium.startalent_sb.utils.JsonNodeConverter;
 import jakarta.persistence.*;
@@ -63,6 +65,13 @@ public class Account {
     @OneToMany(mappedBy = "account", fetch = FetchType.LAZY)
     @JsonIgnore
     private List<User> users;
+
+    @OneToMany(mappedBy = "account", fetch = FetchType.LAZY)
+    @JsonIgnore
+    private List<Job> jobs;
+
+    @OneToMany(mappedBy = "account", fetch = FetchType.LAZY, cascade = CascadeType.ALL)
+    private List<Role> roles;
 
     public Long getId() {
         return id;
@@ -134,6 +143,22 @@ public class Account {
 
     public void setUsers(List<User> users) {
         this.users = users;
+    }
+
+    public List<Job> getJobs() {
+        return jobs;
+    }
+
+    public void setJobs(List<Job> jobs) {
+        this.jobs = jobs;
+    }
+
+    public List<Role> getRoles() {
+        return roles;
+    }
+
+    public void setRoles(List<Role> roles) {
+        this.roles = roles;
     }
 
     @Override

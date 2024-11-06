@@ -1,10 +1,12 @@
 package com.revenatium.startalent_sb.users;
 
+import com.fasterxml.jackson.annotation.JsonIgnore;
 import com.revenatium.startalent_sb.accounts.Account;
 import com.revenatium.startalent_sb.userRole.UserRole;
 import jakarta.persistence.*;
 import jakarta.validation.constraints.Email;
 import jakarta.validation.constraints.NotBlank;
+import lombok.*;
 import org.hibernate.annotations.BatchSize;
 import org.springframework.data.annotation.CreatedDate;
 import org.springframework.data.annotation.LastModifiedDate;
@@ -12,20 +14,19 @@ import org.springframework.data.jpa.domain.support.AuditingEntityListener;
 
 import java.time.LocalDateTime;
 import java.util.HashSet;
-import java.util.Objects;
 import java.util.Set;
 
+@AllArgsConstructor
+@NoArgsConstructor
+@Getter
+@Setter
+@Builder
 @Entity
 @Table(name = "users")
 @EntityListeners(AuditingEntityListener.class)
+@EqualsAndHashCode(exclude = {"account", "userRoles"})
+@ToString(exclude = {"account", "userRoles"})
 public class User {
-
-    // REVIEW: Sugerencias de mejora:
-    //  1. Agregar un campo 'isActive' para manejar usuarios activos/inactivos.
-    //  2. Considerar usar @Enumerated para el campo 'role' si se decide manejar roles como enum.
-    //  3. Implementar métodos equals() y hashCode() para comparaciones adecuadas.
-    //  4. Usar @CreatedDate y @LastModifiedDate de Spring Data para manejar automáticamente las fechas de creación y actualización.
-    //  5. Agregar validaciones con anotaciones de Jakarta Bean Validation (por ejemplo, @Email, @NotBlank, etc.).
 
     @Id
     @GeneratedValue
@@ -33,6 +34,7 @@ public class User {
 
     @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "account_id")
+    @JsonIgnore
     private Account account;
 
     @Column(nullable = false)
@@ -66,10 +68,8 @@ public class User {
 
     @BatchSize(size = 20)
     @OneToMany(mappedBy = "user", fetch = FetchType.LAZY)
+    @JsonIgnore
     private Set<UserRole> userRoles = new HashSet<>();
-
-    public User() {
-    }
 
     public User(Account account, String email, String passwordHash, String firstName, String lastName) {
         this.account = account;
@@ -81,82 +81,4 @@ public class User {
         this.updatedAt = LocalDateTime.now();
     }
 
-    @Override
-    public boolean equals(Object o) {
-        if (this == o) return true;
-        if (o == null || getClass() != o.getClass()) return false;
-        User user = (User) o;
-        return Objects.equals(id, user.id) &&
-                Objects.equals(email, user.email);
-    }
-
-    @Override
-    public int hashCode() {
-        return Objects.hash(id, email);
-    }
-
-
-    public Long getId() {
-        return id;
-    }
-
-    public void setId(Long id) {
-        this.id = id;
-    }
-
-
-    public String getEmail() {
-        return email;
-    }
-
-    public void setEmail(String email) {
-        this.email = email;
-    }
-
-    public String getPasswordHash() {
-        return passwordHash;
-    }
-
-    public void setPasswordHash(String passwordHash) {
-        this.passwordHash = passwordHash;
-    }
-
-    public String getFirstName() {
-        return firstName;
-    }
-
-    public void setFirstName(String firstName) {
-        this.firstName = firstName;
-    }
-
-    public String getLastName() {
-        return lastName;
-    }
-
-    public void setLastName(String lastName) {
-        this.lastName = lastName;
-    }
-
-    public LocalDateTime getCreatedAt() {
-        return createdAt;
-    }
-
-    public void setCreatedAt(LocalDateTime createdAt) {
-        this.createdAt = createdAt;
-    }
-
-    public LocalDateTime getUpdatedAt() {
-        return updatedAt;
-    }
-    public void setUpdatedAt(LocalDateTime updatedAt) {
-        this.updatedAt = updatedAt;
-    }
-
-    public Set<UserRole> getUserRoles() {
-        return userRoles;
-    }
-
-    public void setUserRoles(Set<UserRole> userRoles) {
-        this.userRoles = userRoles;
-    }
 }

@@ -9,7 +9,5 @@ public interface RoleRepository extends JpaRepository<Role, Long> {
 
     Optional<Role> findByName(ERole name);
 
-    List<Role> findByAccountId(Long accountId);
-
-    List<Role> findByNameAndAccountId(ERole name, Long accountId);
+    List<Role> findAllByName(ERole name);
 }

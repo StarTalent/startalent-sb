@@ -25,18 +25,13 @@ import java.util.Set;
 @Entity
 @Table(name = "users")
 @EntityListeners(AuditingEntityListener.class)
-@EqualsAndHashCode(exclude = {"account", "userRoles"})
-@ToString(exclude = {"account", "userRoles"})
+@EqualsAndHashCode(exclude = {"userRoles"})
+@ToString(exclude = {"userRoles"})
 public class User extends TenantAbstractBaseEntity {
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
-
-    @ManyToOne(fetch = FetchType.LAZY)
-    @JoinColumn(name = "account_id")
-    @JsonIgnore
-    private Account account;
 
     @Column(nullable = false)
     @NotBlank
@@ -72,8 +67,7 @@ public class User extends TenantAbstractBaseEntity {
     @JsonIgnore
     private Set<UserRole> userRoles = new HashSet<>();
 
-    public User(Account account, String email, String passwordHash, String firstName, String lastName) {
-        this.account = account;
+    public User(String email, String passwordHash, String firstName, String lastName) {
         this.email = email;
         this.passwordHash = passwordHash;
         this.firstName = firstName;

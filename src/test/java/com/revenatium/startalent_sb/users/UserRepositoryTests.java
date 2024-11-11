@@ -9,7 +9,9 @@ import org.junit.jupiter.api.*;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.autoconfigure.jdbc.AutoConfigureTestDatabase;
 import org.springframework.boot.test.autoconfigure.orm.jpa.DataJpaTest;
+import org.springframework.boot.test.mock.mockito.MockBean;
 import org.springframework.context.annotation.Import;
+import org.springframework.security.crypto.password.PasswordEncoder;
 
 import java.util.List;
 import java.util.Optional;
@@ -23,6 +25,9 @@ import static org.assertj.core.api.Assertions.assertThat;
 class UserRepositoryTests {
     @Autowired
     private UserRepository userRepository;
+
+    @MockBean
+    private PasswordEncoder passwordEncoder;
 
     @Nested
     @DisplayName("buscar por nombre")
@@ -85,7 +90,7 @@ class UserRepositoryTests {
             Role role = new Role();
             role.setName(ERole.USER);
 
-            UserRole userRole = new UserRole(user, role);
+            UserRole userRole = new UserRole(user, role, true);
             user.setUserRoles(Set.of(userRole));
 
             User savedUser = userRepository.save(user);

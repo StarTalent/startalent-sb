@@ -21,9 +21,7 @@ public interface UserRepository extends JpaRepository<User, Long> {
 
     Optional <User> findOneByEmail(String email);
 
-    @Query("select u from User u " +
-            " left join fetch u.account a" +
-            "  where u.email = :email")
+    @Query("select u from User u where u.email = :email")
     User findOneByEmailOptimized(@Param("email") String email);
 
     @Query("select u from User u where u.email = ?1")

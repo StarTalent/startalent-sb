@@ -8,7 +8,6 @@ import io.jsonwebtoken.io.Decoders;
 import io.jsonwebtoken.security.Keys;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
-import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Component;
 
 import javax.crypto.SecretKey;
@@ -26,9 +25,9 @@ public class JwtUtils {
         this.starTalentConfiguration = starTalentConfiguration;
     }
 
-    public String generateAccesToken(String username) {
+    public String generateAccessToken(String username) {
         return Jwts.builder()
-                .setSubject(username)
+                .subject(username)
                 .setIssuedAt(new Date(System.currentTimeMillis()))
                 .setExpiration(new Date(System.currentTimeMillis() + Long.parseLong(starTalentConfiguration.getJwt().getExpirationMs())))
                 .signWith(getSecretKey(), SignatureAlgorithm.HS256)

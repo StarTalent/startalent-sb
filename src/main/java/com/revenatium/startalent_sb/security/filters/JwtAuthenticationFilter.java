@@ -1,6 +1,7 @@
 package com.revenatium.startalent_sb.security.filters;
 
 import com.fasterxml.jackson.databind.ObjectMapper;
+import com.revenatium.startalent_sb.config.tenant.TenantContext;
 import com.revenatium.startalent_sb.security.jwt.JwtUtils;
 import com.revenatium.startalent_sb.users.User;
 import jakarta.servlet.FilterChain;
@@ -33,6 +34,11 @@ public class JwtAuthenticationFilter extends UsernamePasswordAuthenticationFilte
         User user = new User();
         String email;
         String password;
+        String account = request.getHeader("account");
+        if (account == null) {
+            throw new RuntimeException("Account not found");
+        }
+        TenantContext.setTenantId(account);
 
         try {
             user = new ObjectMapper().readValue(request.getInputStream(), User.class);
@@ -57,7 +63,7 @@ public class JwtAuthenticationFilter extends UsernamePasswordAuthenticationFilte
 
         org.springframework.security.core.userdetails.User user = (org.springframework.security.core.userdetails.User) authResult.getPrincipal();
 
-        String token = jwtUtils.generateAccesToken(user.getUsername());
+        String token = jwtUtils.generateAccessToken(user.getUsername());
 
         response.addHeader("Authorization", token);
 

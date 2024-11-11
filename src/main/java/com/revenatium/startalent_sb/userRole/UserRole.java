@@ -39,10 +39,6 @@ public class UserRole extends TenantAbstractBaseEntity {
     @JsonIgnore
     private Role role;
 
-    @ManyToOne(fetch = FetchType.LAZY)
-    @JoinColumn(name = "account_id", nullable = false)
-    private Account account;
-
     @CreatedDate
     @Column(name = "assigned_at", updatable = false)
     private LocalDateTime assignedAt;
@@ -57,6 +53,12 @@ public class UserRole extends TenantAbstractBaseEntity {
     public UserRole(User user, Role role) {
         this.user = user;
         this.role = role;
+    }
+
+    public UserRole(User user, Role role, Boolean isActive) {
+        this.user = user;
+        this.role = role;
+        this.isActive = isActive;
     }
 
     @PrePersist

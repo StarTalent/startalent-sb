@@ -4,7 +4,7 @@ public class TenantContext {
     private static final InheritableThreadLocal<String> tenant = new InheritableThreadLocal<>();
 
     public static String getTenantId() {
-        return tenant.get() != null ? tenant.get() : "ixtul";
+        return tenant.get() != null ? tenant.get() : "test-tenant";
     }
 
     public static void setTenantId(String tenantId) {

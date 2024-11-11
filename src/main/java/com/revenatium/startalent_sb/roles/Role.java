@@ -19,8 +19,8 @@ import java.util.Set;
 @Builder
 @Entity
 @Table(name = "roles")
-@EqualsAndHashCode(exclude = {"userRoles", "account"})
-@ToString(exclude = {"userRoles", "account"})
+@EqualsAndHashCode(exclude = {"userRoles"})
+@ToString(exclude = {"userRoles"})
 public class Role extends TenantAbstractBaseEntity {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
@@ -38,10 +38,5 @@ public class Role extends TenantAbstractBaseEntity {
     @OneToMany(mappedBy = "role", fetch = FetchType.LAZY)
     @JsonIgnore
     private Set<UserRole> userRoles = new HashSet<>();
-
-    @ManyToOne(fetch = FetchType.LAZY)
-    @JoinColumn(name = "account_id", nullable = false)
-    @JsonIgnore
-    private Account account;
 
 }

@@ -25,8 +25,6 @@ import java.util.List;
 @Getter
 @Setter
 @EntityListeners(AuditingEntityListener.class)
-@EqualsAndHashCode(exclude = {"users", "jobs", "roles"})
-@ToString(exclude = {"users", "jobs", "roles"})
 public class Account extends TenantAbstractBaseEntity {
 
     @Id
@@ -58,18 +56,6 @@ public class Account extends TenantAbstractBaseEntity {
 
     @Column(name = "account_type")
     private String accountType;
-
-    @OneToMany(mappedBy = "account", fetch = FetchType.LAZY)
-    @JsonIgnore
-    private List<User> users;
-
-    @OneToMany(mappedBy = "account", fetch = FetchType.LAZY)
-    @JsonIgnore
-    private List<Job> jobs;
-
-    @OneToMany(mappedBy = "account", fetch = FetchType.LAZY, cascade = CascadeType.ALL)
-    @JsonIgnore
-    private List<Role> roles;
 
     @PrePersist
     private void prePersist() {

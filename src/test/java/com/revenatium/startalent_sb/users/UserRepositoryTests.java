@@ -33,6 +33,7 @@ class UserRepositoryTests {
             // given: crear un usuario con el nombre "John" y guardarlo en la base de datos
             User user = new User();
             user.setFirstName("John");
+            user.setEmail("john@doe.com");
             userRepository.save(user);
 
             // when: ejecutar la prueba
@@ -77,21 +78,22 @@ class UserRepositoryTests {
         void shouldReturnUserWithRoles_WhenIdExists() {
             // given: crear un usuario real y guardarlo en la base de datos
             User user = new User();
-            user.setId(1L);
+            user.setEmail("john@doe.com");
             user.setFirstName("John");
             user.setLastName("Doe");
 
             Role role = new Role();
-            role.setId(1L);
             role.setName(ERole.USER);
 
             UserRole userRole = new UserRole(user, role);
             user.setUserRoles(Set.of(userRole));
 
-            userRepository.save(user);
+            User savedUser = userRepository.save(user);
+
+            assertThat(savedUser.getId()).isNotNull();
 
             // when: ejecutar la prueba
-            Optional<User> result = userRepository.findByIdWithRoles(1L);
+            Optional<User> result = userRepository.findByIdWithRoles(savedUser.getId());
 
             // then: verificar el resultado
             assertThat(result).isPresent();

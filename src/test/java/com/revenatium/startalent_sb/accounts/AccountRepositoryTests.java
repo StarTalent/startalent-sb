@@ -1,5 +1,8 @@
 package com.revenatium.startalent_sb.accounts;
 
+import com.fasterxml.jackson.databind.JsonNode;
+import com.fasterxml.jackson.databind.node.JsonNodeFactory;
+import com.fasterxml.jackson.databind.node.ObjectNode;
 import com.revenatium.startalent_sb.config.TestJpaConfig;
 import com.revenatium.startalent_sb.config.TestTenantConfig;
 import org.junit.jupiter.api.DisplayName;
@@ -24,8 +27,12 @@ class AccountRepositoryTests {
     @Test
     @DisplayName("debería devolver cuentas cuando el nombre existe")
     void shouldReturnAccounts_WhenNameExists() {
+        ObjectNode brandingConfig = JsonNodeFactory.instance.objectNode();
+        brandingConfig.put("key", "value");
         Account account = new Account();
         account.setName("John Doe");
+        account.setDomain("example.com");
+        account.setBrandingConfig(brandingConfig);
         accountRepository.save(account);
 
         List<Account> accounts = accountRepository.findByName("John Doe");

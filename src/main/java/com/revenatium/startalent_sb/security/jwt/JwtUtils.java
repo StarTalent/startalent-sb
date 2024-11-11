@@ -1,5 +1,6 @@
 package com.revenatium.startalent_sb.security.jwt;
 
+import com.revenatium.startalent_sb.config.StarTalentConfiguration;
 import io.jsonwebtoken.Claims;
 import io.jsonwebtoken.Jwts;
 import io.jsonwebtoken.SignatureAlgorithm;
@@ -19,17 +20,17 @@ public class JwtUtils {
 
     private static final Logger log = LoggerFactory.getLogger(JwtUtils.class);
 
-    @Value("${spring.jwt.secret}")
-    private String secretKey;
+    private final StarTalentConfiguration starTalentConfiguration;
 
-    @Value("${spring.jwt.expirationMs}")
-    private String expirationMs;
+    public JwtUtils(StarTalentConfiguration starTalentConfiguration) {
+        this.starTalentConfiguration = starTalentConfiguration;
+    }
 
     public String generateAccesToken(String username) {
         return Jwts.builder()
                 .setSubject(username)
                 .setIssuedAt(new Date(System.currentTimeMillis()))
-                .setExpiration(new Date(System.currentTimeMillis() + Long.parseLong(expirationMs)))
+                .setExpiration(new Date(System.currentTimeMillis() + Long.parseLong(starTalentConfiguration.getJwt().getExpirationMs())))
                 .signWith(getSecretKey(), SignatureAlgorithm.HS256)
                 .compact();
     }
@@ -67,7 +68,7 @@ public class JwtUtils {
     }
 
     public SecretKey getSecretKey() {
-        byte[] keyBytes = Decoders.BASE64.decode(secretKey);
+        byte[] keyBytes = Decoders.BASE64.decode(starTalentConfiguration.getJwt().getSecret());
         return Keys.hmacShaKeyFor(keyBytes);
     }
 

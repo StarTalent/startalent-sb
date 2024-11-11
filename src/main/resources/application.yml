@@ -1,17 +1,29 @@
 spring:
+  application:
+    name: startalent-sb
   profiles:
     active: dev
+
+logging:
+  level:
+    com.revenatium.startalent_sb.StartalentSbApplication: DEBUG
 
 ---
 spring:
   config:
     activate:
       on-profile: dev
+  jpa:
+    generate-ddl: true
+    open-in-view: false
   datasource:
     url: jdbc:postgresql://ep-delicate-field-a5h3sryq.us-east-2.aws.neon.tech/startalent?sslmode=require
     username: startalent_owner
     password: 8TbaIRmjDU6s
     driver-class-name: org.postgresql.Driver
+  jwt:
+    secret: 8ZNwoJMZEX3WK+xcW5EpmrN5DuQBAwaJBNC8bVeOaeoLeNJZq5Lav1YW3oWTQjz0
+    expirationMs: 864000000
 
 ---
 spring:

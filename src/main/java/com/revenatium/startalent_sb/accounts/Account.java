@@ -2,6 +2,7 @@ package com.revenatium.startalent_sb.accounts;
 
 import com.fasterxml.jackson.annotation.JsonIgnore;
 import com.fasterxml.jackson.databind.JsonNode;
+import com.revenatium.startalent_sb.config.tenant.TenantAbstractBaseEntity;
 import com.revenatium.startalent_sb.jobs.Job;
 import com.revenatium.startalent_sb.roles.Role;
 import com.revenatium.startalent_sb.users.User;
@@ -20,14 +21,16 @@ import java.util.List;
 @NoArgsConstructor
 @Builder
 @Entity
-@Table(name = "accounts") // REVIEW: ¿Por qué no se usa el nombre 'accounts'?
+@Table(name = "accounts")
+@Getter
+@Setter
 @EntityListeners(AuditingEntityListener.class)
 @EqualsAndHashCode(exclude = {"users", "jobs", "roles"})
 @ToString(exclude = {"users", "jobs", "roles"})
-public class Account {
+public class Account extends TenantAbstractBaseEntity {
 
     @Id
-    @GeneratedValue
+    @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
 
     @Column(nullable = false)
@@ -67,6 +70,17 @@ public class Account {
     @OneToMany(mappedBy = "account", fetch = FetchType.LAZY, cascade = CascadeType.ALL)
     @JsonIgnore
     private List<Role> roles;
+
+    @PrePersist
+    private void prePersist() {
+        this.createdAt = LocalDateTime.now();
+        this.updatedAt = LocalDateTime.now();
+    }
+
+    @PreUpdate
+    private void preUpdate() {
+        this.updatedAt = LocalDateTime.now();
+    }
 
 }
 

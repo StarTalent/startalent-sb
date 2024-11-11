@@ -1,12 +1,15 @@
 package com.revenatium.startalent_sb.users;
 
+import com.revenatium.startalent_sb.config.TestJpaConfig;
+import com.revenatium.startalent_sb.config.TestTenantConfig;
+import com.revenatium.startalent_sb.roles.ERole;
 import com.revenatium.startalent_sb.roles.Role;
 import com.revenatium.startalent_sb.userRole.UserRole;
-import org.junit.jupiter.api.DisplayName;
-import org.junit.jupiter.api.Nested;
-import org.junit.jupiter.api.Test;
+import org.junit.jupiter.api.*;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.boot.test.autoconfigure.jdbc.AutoConfigureTestDatabase;
 import org.springframework.boot.test.autoconfigure.orm.jpa.DataJpaTest;
+import org.springframework.context.annotation.Import;
 
 import java.util.List;
 import java.util.Optional;
@@ -15,6 +18,8 @@ import java.util.Set;
 import static org.assertj.core.api.Assertions.assertThat;
 
 @DataJpaTest
+@AutoConfigureTestDatabase(replace = AutoConfigureTestDatabase.Replace.NONE)
+@Import({TestTenantConfig.class, TestJpaConfig.class})
 class UserRepositoryTests {
     @Autowired
     private UserRepository userRepository;
@@ -78,9 +83,9 @@ class UserRepositoryTests {
 
             Role role = new Role();
             role.setId(1L);
-            role.setName("ADMIN");
+            role.setName(ERole.USER);
 
-            UserRole userRole = new UserRole(user, role, null, null);
+            UserRole userRole = new UserRole(user, role);
             user.setUserRoles(Set.of(userRole));
 
             userRepository.save(user);

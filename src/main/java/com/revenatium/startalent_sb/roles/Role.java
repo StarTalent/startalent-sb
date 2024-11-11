@@ -2,6 +2,7 @@ package com.revenatium.startalent_sb.roles;
 
 import com.fasterxml.jackson.annotation.JsonIgnore;
 import com.revenatium.startalent_sb.accounts.Account;
+import com.revenatium.startalent_sb.config.tenant.TenantAbstractBaseEntity;
 import com.revenatium.startalent_sb.userRole.UserRole;
 import jakarta.persistence.*;
 import jakarta.validation.constraints.NotBlank;
@@ -20,9 +21,9 @@ import java.util.Set;
 @Table(name = "roles")
 @EqualsAndHashCode(exclude = {"userRoles", "account"})
 @ToString(exclude = {"userRoles", "account"})
-public class Role {
+public class Role extends TenantAbstractBaseEntity {
     @Id
-    @GeneratedValue
+    @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
 
     @NotBlank

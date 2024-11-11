@@ -22,14 +22,20 @@ import static org.springframework.security.config.http.SessionCreationPolicy.STA
 @EnableGlobalMethodSecurity(prePostEnabled = true)
 public class SecurityConfig {
 
-    @Autowired
+    final
     JwtUtils jwtUtils;
 
-    @Autowired
+    final
     UserDetailsServiceImpl userDetailsService;
 
-    @Autowired
+    final
     JwtAuthorizationFilter authorizationFilter;
+
+    public SecurityConfig(JwtUtils jwtUtils, UserDetailsServiceImpl userDetailsService, JwtAuthorizationFilter authorizationFilter) {
+        this.jwtUtils = jwtUtils;
+        this.userDetailsService = userDetailsService;
+        this.authorizationFilter = authorizationFilter;
+    }
 
 
     @Bean

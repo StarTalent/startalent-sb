@@ -1,9 +1,17 @@
 package com.revenatium.startalent_sb.controller;
 
+import com.revenatium.startalent_sb.config.TestJpaConfig;
+import com.revenatium.startalent_sb.config.TestSecurityConfig;
+import com.revenatium.startalent_sb.config.TestTenantConfig;
+import com.revenatium.startalent_sb.security.jwt.JwtUtils;
+import com.revenatium.startalent_sb.security.service.UserDetailsServiceImpl;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.boot.test.autoconfigure.jdbc.AutoConfigureTestDatabase;
 import org.springframework.boot.test.autoconfigure.web.servlet.WebMvcTest;
+import org.springframework.boot.test.mock.mockito.MockBean;
+import org.springframework.context.annotation.Import;
 import org.springframework.test.web.servlet.MockMvc;
 
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.get;
@@ -11,10 +19,18 @@ import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.status;
 
 @WebMvcTest(JobController.class)
+@AutoConfigureTestDatabase(replace = AutoConfigureTestDatabase.Replace.NONE)
+@Import({TestSecurityConfig.class, TestTenantConfig.class, TestJpaConfig.class})
 class JobControllerTests {
 
     @Autowired
     private MockMvc mockMvc;
+
+    @MockBean
+    private JwtUtils jwtUtils;
+
+    @MockBean
+    private UserDetailsServiceImpl userDetailsService;
 
     @Test
     @DisplayName("debería devolver 'Hello World'")

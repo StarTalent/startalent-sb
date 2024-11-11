@@ -2,6 +2,7 @@ package com.revenatium.startalent_sb.users;
 
 import com.fasterxml.jackson.annotation.JsonIgnore;
 import com.revenatium.startalent_sb.accounts.Account;
+import com.revenatium.startalent_sb.config.tenant.TenantAbstractBaseEntity;
 import com.revenatium.startalent_sb.userRole.UserRole;
 import jakarta.persistence.*;
 import jakarta.validation.constraints.Email;
@@ -26,10 +27,10 @@ import java.util.Set;
 @EntityListeners(AuditingEntityListener.class)
 @EqualsAndHashCode(exclude = {"account", "userRoles"})
 @ToString(exclude = {"account", "userRoles"})
-public class User {
+public class User extends TenantAbstractBaseEntity {
 
     @Id
-    @GeneratedValue
+    @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
 
     @ManyToOne(fetch = FetchType.LAZY)
@@ -78,6 +79,17 @@ public class User {
         this.firstName = firstName;
         this.lastName = lastName;
         this.createdAt = LocalDateTime.now();
+        this.updatedAt = LocalDateTime.now();
+    }
+
+    @PrePersist
+    private void prePersist() {
+        this.createdAt = LocalDateTime.now();
+        this.updatedAt = LocalDateTime.now();
+    }
+
+    @PreUpdate
+    private void preUpdate() {
         this.updatedAt = LocalDateTime.now();
     }
 

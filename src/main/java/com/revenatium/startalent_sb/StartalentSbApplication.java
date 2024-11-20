@@ -8,6 +8,7 @@ import com.revenatium.startalent_sb.userRole.UserRole;
 import com.revenatium.startalent_sb.userRole.UserRoleRepository;
 import com.revenatium.startalent_sb.users.User;
 import com.revenatium.startalent_sb.users.UserRepository;
+import com.revenatium.startalent_sb.utils.RegisterUserCommand;
 import org.slf4j.Logger;
 import org.springframework.boot.CommandLineRunner;
 import org.springframework.boot.SpringApplication;
@@ -17,6 +18,7 @@ import org.springframework.context.annotation.Bean;
 import org.springframework.core.env.Environment;
 import org.springframework.security.crypto.password.PasswordEncoder;
 
+import java.util.Optional;
 import java.util.Set;
 
 @SpringBootApplication
@@ -38,36 +40,65 @@ public class StartalentSbApplication {
     CommandLineRunner init(PasswordEncoder passwordEncoder, RoleRepository roleRepository, UserRepository userRepository, UserRoleRepository userRoleRepository) {
         return args -> {
             TenantContext.setTenantId("startalent");
-            long numberOfUsers = userRepository.count();
-            if (numberOfUsers == 0) {
-                Role role = Role.builder()
-                    .name(ERole.ADMIN)
-                    .build();
-
-                Role roleSaved = roleRepository.save(role);
-
-                User user = User.builder()
-                    .email("Alberto@gmail.com")
-                    .passwordHash(passwordEncoder.encode("1234"))
-                    .firstName("Alberto")
-                    .lastName("Alvarez")
-                    .isActive(true)
-                    .build();
-
-                User userSaved = userRepository.save(user);
-
-                UserRole userRole = UserRole.builder()
-                    .user(userSaved)  // Relación con el usuario
-                    .role(roleSaved)  // Relación con el rol
-                    .isActive(true)
-                    .build();
-
-                UserRole userRoleSaved = userRoleRepository.save(userRole);
-
-                user.setUserRoles(Set.of(userRoleSaved));
-
-                userRepository.save(user);
-            }
+            Role role = createRoleIfNotExists(roleRepository);
+            RegisterUserCommand registerUserCommand = new RegisterUserCommand(
+                passwordEncoder,
+                userRepository,
+                userRoleRepository,
+                role
+            );
+            registerUserIfNotExists(registerUserCommand, "lgzarturo@gmail.com", "Alberto@gmail.com");
         };
+    }
+
+    static Role createRoleIfNotExists(RoleRepository roleRepository) {
+        Optional<Role> savedRole = roleRepository.findByName(ERole.ADMIN);
+        if (savedRole.isPresent()) {
+            return savedRole.get();
+        }
+        Role role = Role.builder()
+            .name(ERole.ADMIN)
+            .build();
+
+        return roleRepository.save(role);
+    }
+
+    static void registerUserIfNotExists(RegisterUserCommand command, String... emails) {
+        for (String email : emails) {
+            log.debug("User with email: {}", email);
+            Optional<User> user = command.userRepository().findByEmail(email);
+            if (user.isPresent()) {
+                continue;
+            }
+            if (email == null || email.isEmpty()) {
+                continue;
+            }
+            if (!email.contains("@")) {
+                log.error("Invalid email: {}", email);
+                continue;
+            }
+            String[] items = email.split("@");
+            User newUser = User.builder()
+                .email(email)
+                .passwordHash(command.passwordEncoder().encode("1234"))
+                .firstName(items[0])
+                .lastName(items[1])
+                .isActive(true)
+                .build();
+
+            User userSaved = command.userRepository().save(newUser);
+
+            UserRole userRole = UserRole.builder()
+                .user(userSaved)  // Relación con el usuario
+                .role(command.role())  // Relación con el rol
+                .isActive(true)
+                .build();
+
+            UserRole userRoleSaved = command.userRoleRepository().save(userRole);
+
+            userSaved.setUserRoles(Set.of(userRoleSaved));
+
+            command.userRepository().save(userSaved);
+        }
     }
 }

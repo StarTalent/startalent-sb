@@ -7,8 +7,11 @@ spring:
 logging:
   level:
     com.revenatium.startalent_sb.StartalentSbApplication: DEBUG
+server:
+  port: 8989
 
 ---
+# Development profile
 spring:
   config:
     activate:
@@ -16,16 +19,37 @@ spring:
   jpa:
     generate-ddl: true
     open-in-view: false
+    show-sql: true
   datasource:
     url: jdbc:postgresql://ep-delicate-field-a5h3sryq.us-east-2.aws.neon.tech/startalent?sslmode=require
     username: startalent_owner
     password: 8TbaIRmjDU6s
     driver-class-name: org.postgresql.Driver
+
+startalent:
   jwt:
     secret: 8ZNwoJMZEX3WK+xcW5EpmrN5DuQBAwaJBNC8bVeOaeoLeNJZq5Lav1YW3oWTQjz0
     expirationMs: 864000000
 
 ---
+# Test profile
+spring:
+  config:
+    activate:
+      on-profile: test
+  jpa:
+    generate-ddl: true
+    open-in-view: false
+    show-sql: true
+    database-platform: org.hibernate.dialect.H2Dialect
+  datasource:
+    url: jdbc:h2:mem:testdb
+    username: sa
+    password: password
+    driver-class-name: org.h2.Driver
+
+---
+# Production profile
 spring:
   config:
     activate:

@@ -26,6 +26,8 @@ public class Role extends TenantAbstractBaseEntity {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
 
+    @Enumerated(EnumType.STRING)
+    @Column(name = "name", columnDefinition = "VARCHAR(255)")
     @NotBlank
     private ERole name;
 

@@ -19,14 +19,13 @@ import java.util.List;
 
 @AllArgsConstructor
 @NoArgsConstructor
+@Getter
+@Setter
 @Builder
 @Entity
 @Table(name = "accounts")
-@Getter
-@Setter
 @EntityListeners(AuditingEntityListener.class)
 public class Account extends TenantAbstractBaseEntity {
-
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;

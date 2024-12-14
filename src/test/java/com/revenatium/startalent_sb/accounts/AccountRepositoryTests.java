@@ -1,10 +1,8 @@
 package com.revenatium.startalent_sb.accounts;
 
-import com.fasterxml.jackson.databind.JsonNode;
-import com.fasterxml.jackson.databind.node.JsonNodeFactory;
-import com.fasterxml.jackson.databind.node.ObjectNode;
 import com.revenatium.startalent_sb.config.TestJpaConfig;
 import com.revenatium.startalent_sb.config.TestTenantConfig;
+import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -13,14 +11,18 @@ import org.springframework.boot.test.autoconfigure.orm.jpa.DataJpaTest;
 import org.springframework.boot.test.mock.mockito.MockBean;
 import org.springframework.context.annotation.Import;
 import org.springframework.security.crypto.password.PasswordEncoder;
+import org.springframework.test.context.ActiveProfiles;
 
 import java.util.List;
 
 import static org.assertj.core.api.Assertions.assertThat;
+import static org.mockito.ArgumentMatchers.anyString;
+import static org.mockito.Mockito.when;
 
 @DataJpaTest
 @AutoConfigureTestDatabase(replace = AutoConfigureTestDatabase.Replace.NONE)
 @Import({TestTenantConfig.class, TestJpaConfig.class})
+@ActiveProfiles("test")
 class AccountRepositoryTests {
 
     @Autowired
@@ -29,15 +31,17 @@ class AccountRepositoryTests {
     @MockBean
     private PasswordEncoder passwordEncoder;
 
+    @BeforeEach
+    void setUp() {
+        when(passwordEncoder.encode(anyString())).thenReturn("encodedPassword");
+    }
+
     @Test
     @DisplayName("debería devolver cuentas cuando el nombre existe")
     void shouldReturnAccounts_WhenNameExists() {
-        ObjectNode brandingConfig = JsonNodeFactory.instance.objectNode();
-        brandingConfig.put("key", "value");
         Account account = new Account();
         account.setName("John Doe");
         account.setDomain("example.com");
-        account.setBrandingConfig(brandingConfig);
         accountRepository.save(account);
 
         List<Account> accounts = accountRepository.findByName("John Doe");

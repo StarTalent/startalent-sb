@@ -7,6 +7,11 @@ import org.springframework.web.bind.annotation.RestController;
 @RestController
 public class JobController {
 
+    @GetMapping("/jobs")
+    public String hello() {
+        return "Hello World";
+    }
+
     @GetMapping("/jobsAccessAdmin")
     @PreAuthorize("hasRole('ADMIN')")
     public String listAll() {

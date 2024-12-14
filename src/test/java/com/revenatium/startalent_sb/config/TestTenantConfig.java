@@ -13,11 +13,6 @@ public class TestTenantConfig {
             public String resolveCurrentTenantIdentifier() {
                 return "test-tenant";
             }
-
-            @Override
-            public boolean validateExistingCurrentSessions() {
-                return true;
-            }
         };
     }
 }

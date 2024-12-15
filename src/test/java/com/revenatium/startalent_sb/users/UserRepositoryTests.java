@@ -12,14 +12,17 @@ import org.springframework.boot.test.autoconfigure.orm.jpa.DataJpaTest;
 import org.springframework.boot.test.mock.mockito.MockBean;
 import org.springframework.context.annotation.Import;
 import org.springframework.security.crypto.password.PasswordEncoder;
+import org.springframework.test.context.ActiveProfiles;
 
 import java.util.List;
 import java.util.Optional;
 import java.util.Set;
 
 import static org.assertj.core.api.Assertions.assertThat;
+import static org.mockito.Mockito.when;
 
 @DataJpaTest
+@ActiveProfiles("test")
 @AutoConfigureTestDatabase(replace = AutoConfigureTestDatabase.Replace.NONE)
 @Import({TestTenantConfig.class, TestJpaConfig.class})
 class UserRepositoryTests {
@@ -36,8 +39,11 @@ class UserRepositoryTests {
         @DisplayName("debería devolver usuarios cuando el nombre existe")
         void shouldReturnUsers_WhenFirstNameExists() {
             // given: crear un usuario con el nombre "John" y guardarlo en la base de datos
+            when(passwordEncoder.encode("1234")).thenReturn("encodedPassword");
             User user = new User();
             user.setFirstName("John");
+            user.setLastName("Doe");
+            user.setPasswordHash(passwordEncoder.encode("1234"));
             user.setEmail("john@doe.com");
             userRepository.save(user);
 
@@ -82,9 +88,11 @@ class UserRepositoryTests {
         @DisplayName("debería devolver usuario con roles cuando el id existe")
         void shouldReturnUserWithRoles_WhenIdExists() {
             // given: crear un usuario real y guardarlo en la base de datos
+            when(passwordEncoder.encode("1234")).thenReturn("encodedPassword");
             User user = new User();
             user.setEmail("john@doe.com");
             user.setFirstName("John");
+            user.setPasswordHash(passwordEncoder.encode("1234"));
             user.setLastName("Doe");
 
             Role role = new Role();

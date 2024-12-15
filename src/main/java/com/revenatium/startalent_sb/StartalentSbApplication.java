@@ -37,7 +37,7 @@ public class StartalentSbApplication {
 	}
 
 
-    @Profile("!test")
+    @Profile("dev")
     @Bean
     CommandLineRunner init(PasswordEncoder passwordEncoder, RoleRepository roleRepository, UserRepository userRepository, UserRoleRepository userRoleRepository) {
         return args -> {

@@ -1,23 +1,36 @@
 package com.revenatium.startalent_sb.users;
 
+import com.revenatium.startalent_sb.config.TestJpaConfig;
+import com.revenatium.startalent_sb.config.TestTenantConfig;
+import com.revenatium.startalent_sb.roles.ERole;
 import com.revenatium.startalent_sb.roles.Role;
 import com.revenatium.startalent_sb.userRole.UserRole;
-import org.junit.jupiter.api.DisplayName;
-import org.junit.jupiter.api.Nested;
-import org.junit.jupiter.api.Test;
+import org.junit.jupiter.api.*;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.boot.test.autoconfigure.jdbc.AutoConfigureTestDatabase;
 import org.springframework.boot.test.autoconfigure.orm.jpa.DataJpaTest;
+import org.springframework.boot.test.mock.mockito.MockBean;
+import org.springframework.context.annotation.Import;
+import org.springframework.security.crypto.password.PasswordEncoder;
+import org.springframework.test.context.ActiveProfiles;
 
 import java.util.List;
 import java.util.Optional;
 import java.util.Set;
 
 import static org.assertj.core.api.Assertions.assertThat;
+import static org.mockito.Mockito.when;
 
 @DataJpaTest
+@ActiveProfiles("test")
+@AutoConfigureTestDatabase(replace = AutoConfigureTestDatabase.Replace.NONE)
+@Import({TestTenantConfig.class, TestJpaConfig.class})
 class UserRepositoryTests {
     @Autowired
     private UserRepository userRepository;
+
+    @MockBean
+    private PasswordEncoder passwordEncoder;
 
     @Nested
     @DisplayName("buscar por nombre")
@@ -26,8 +39,12 @@ class UserRepositoryTests {
         @DisplayName("debería devolver usuarios cuando el nombre existe")
         void shouldReturnUsers_WhenFirstNameExists() {
             // given: crear un usuario con el nombre "John" y guardarlo en la base de datos
+            when(passwordEncoder.encode("1234")).thenReturn("encodedPassword");
             User user = new User();
             user.setFirstName("John");
+            user.setLastName("Doe");
+            user.setPasswordHash(passwordEncoder.encode("1234"));
+            user.setEmail("john@doe.com");
             userRepository.save(user);
 
             // when: ejecutar la prueba
@@ -71,22 +88,25 @@ class UserRepositoryTests {
         @DisplayName("debería devolver usuario con roles cuando el id existe")
         void shouldReturnUserWithRoles_WhenIdExists() {
             // given: crear un usuario real y guardarlo en la base de datos
+            when(passwordEncoder.encode("1234")).thenReturn("encodedPassword");
             User user = new User();
-            user.setId(1L);
+            user.setEmail("john@doe.com");
             user.setFirstName("John");
+            user.setPasswordHash(passwordEncoder.encode("1234"));
             user.setLastName("Doe");
 
             Role role = new Role();
-            role.setId(1L);
-            role.setName("ADMIN");
+            role.setName(ERole.USER);
 
-            UserRole userRole = new UserRole(user, role, null, null);
+            UserRole userRole = new UserRole(user, role, true);
             user.setUserRoles(Set.of(userRole));
 
-            userRepository.save(user);
+            User savedUser = userRepository.save(user);
+
+            assertThat(savedUser.getId()).isNotNull();
 
             // when: ejecutar la prueba
-            Optional<User> result = userRepository.findByIdWithRoles(1L);
+            Optional<User> result = userRepository.findByIdWithRoles(savedUser.getId());
 
             // then: verificar el resultado
             assertThat(result).isPresent();

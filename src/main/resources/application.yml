@@ -1,19 +1,72 @@
 spring:
+  application:
+    name: startalent-sb
   profiles:
     active: dev
 
+logging:
+  level:
+    com.revenatium.startalent_sb.StartalentSbApplication: DEBUG
+server:
+  port: 8989
+
 ---
+# Development profile
 spring:
   config:
     activate:
       on-profile: dev
+  jpa:
+    generate-ddl: true
+    open-in-view: false
+    show-sql: true
   datasource:
     url: jdbc:postgresql://ep-delicate-field-a5h3sryq.us-east-2.aws.neon.tech/startalent?sslmode=require
     username: startalent_owner
     password: 8TbaIRmjDU6s
     driver-class-name: org.postgresql.Driver
 
+startalent:
+  jwt:
+    secret: 8ZNwoJMZEX3WK+xcW5EpmrN5DuQBAwaJBNC8bVeOaeoLeNJZq5Lav1YW3oWTQjz0
+    expirationMs: 864000000
+
 ---
+# Test profile
+spring:
+  config:
+    activate:
+      on-profile: test
+  jpa:
+    generate-ddl: true
+    open-in-view: false
+    show-sql: true
+    database-platform: org.hibernate.dialect.H2Dialect
+    hibernate:
+      ddl-auto: none
+    properties:
+      hibernate:
+        hbm2ddl:
+          schema-generation:
+            script:
+              append: false
+        format_sql: true
+        dialect: org.hibernate.dialect.H2Dialect
+        type:
+          preferred_instant_jdbc_type: TIMESTAMP
+  sql:
+    init:
+      mode: always
+  datasource:
+    url: jdbc:h2:mem:testdb;DB_CLOSE_DELAY=-1;MODE=PostgreSQL;DATABASE_TO_LOWER=true;DATABASE_TO_UPPER=false;DEFAULT_NULL_ORDERING=HIGH;CASE_INSENSITIVE_IDENTIFIERS=true;INIT=CREATE DOMAIN IF NOT EXISTS json AS VARCHAR
+    username: sa
+    password: password
+    driver-class-name: org.h2.Driver
+  h2:
+    console:
+      enabled: true
+---
+# Production profile
 spring:
   config:
     activate:

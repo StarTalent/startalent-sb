@@ -1,16 +1,29 @@
 package com.revenatium.startalent_sb.controller;
 
+import com.revenatium.startalent_sb.config.TestJpaConfig;
+import com.revenatium.startalent_sb.config.TestSecurityConfig;
+import com.revenatium.startalent_sb.config.TestTenantConfig;
+import com.revenatium.startalent_sb.security.jwt.JwtUtils;
+import com.revenatium.startalent_sb.security.service.UserDetailsServiceImpl;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.boot.test.autoconfigure.jdbc.AutoConfigureTestDatabase;
+import org.springframework.boot.test.autoconfigure.web.servlet.AutoConfigureMockMvc;
 import org.springframework.boot.test.autoconfigure.web.servlet.WebMvcTest;
+import org.springframework.boot.test.context.SpringBootTest;
+import org.springframework.boot.test.mock.mockito.MockBean;
+import org.springframework.context.annotation.Import;
+import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.test.web.servlet.MockMvc;
 
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.get;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.content;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.status;
 
-@WebMvcTest(JobController.class)
+@SpringBootTest
+@AutoConfigureMockMvc
+@Import({TestSecurityConfig.class, TestTenantConfig.class, TestJpaConfig.class})
 class JobControllerTests {
 
     @Autowired

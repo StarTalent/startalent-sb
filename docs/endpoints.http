@@ -1,0 +1,11 @@
+### Login de usuario
+POST {{url}}/login
+Content-Type: application/json
+account: {{tenant}}
+
+{
+  "email": "{{username}}",
+  "passwordHash": "{{password}}"
+}
+
+###

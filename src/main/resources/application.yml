@@ -21,9 +21,9 @@ spring:
     open-in-view: false
     show-sql: true
   datasource:
-    url: jdbc:postgresql://ep-delicate-field-a5h3sryq.us-east-2.aws.neon.tech/startalent?sslmode=require
-    username: startalent_owner
-    password: 8TbaIRmjDU6s
+    url: ${DB_URL}
+    username: ${DB_USERNAME}
+    password: ${DB_PASSWORD}
     driver-class-name: org.postgresql.Driver
 
 startalent:

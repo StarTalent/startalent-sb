@@ -34,3 +34,83 @@ Authorization: Bearer {{token}}
 GET {{url}}/jobsAccessAdminT
 account: {{tenant}}
 Authorization: Bearer {{token}}
+
+### Obtener lista de jobs
+GET {{url}}/api/v1/jobs
+account: {{tenant}}
+
+> {% client.test("Request executed successfully", function () {
+    client.assert(response.status === 200, "Response status is not 200");
+}); %}
+
+### Obtener lista de jobs con paginación (page 0)
+GET {{url}}/api/v1/jobs?page=0&size=10
+account: {{tenant}}
+
+> {% client.test("Request executed successfully", function () {
+    client.assert(response.status === 200, "Response status is not 200");
+}); %}
+
+### Obtener lista de jobs con paginación (page 1)
+GET {{url}}/api/v1/jobs?page=1&size=10
+account: {{tenant}}
+
+> {% client.test("Request executed successfully", function () {
+    client.assert(response.status === 200, "Response status is not 200");
+}); %}
+
+### Agregar un job
+POST {{url}}/api/v1/jobs
+Content-Type: application/json
+account: {{tenant}}
+Authorization: Bearer {{token}}
+
+{
+  "title": "Job1",
+  "description": "Description for Job1",
+  "requirements": "Requirements for Job1",
+  "benefits": "Benefits for Job1",
+  "active": true,
+  "accountId": {{accountId}}
+}
+
+> {% client.test("Request executed successfully", function () {
+    client.assert(response.status === 201, "Response status is not 201");
+}); client.global.set("jobId", response.body.id); %}
+
+### Actualizar un job
+PUT {{url}}/api/v1/jobs/{{jobId}}
+Content-Type: application/json
+account: {{tenant}}
+Authorization: Bearer {{token}}
+
+{
+  "title": "Job1 (updated)",
+  "description": "Description for Job1 (updated)",
+  "requirements": "Requirements for Job1 (updated)",
+  "benefits": "Benefits for Job1 (updated)",
+  "active": true,
+  "accountId": {{accountId}}
+}
+
+> {% client.test("Request executed successfully", function () {
+    client.assert(response.status === 204, "Response status is not 204");
+}); %}
+
+### Eliminar un job
+DELETE {{url}}/api/v1/jobs/{{jobId}}
+account: {{tenant}}
+Authorization: Bearer {{token}}
+
+> {% client.test("Request executed successfully", function () {
+    client.assert(response.status === 204, "Response status is not 204");
+}); %}
+
+### Obtener un job
+GET {{url}}/api/v1/jobs/{{jobId}}
+account: {{tenant}}
+Authorization: Bearer {{token}}
+
+> {% client.test("Request executed successfully", function () {
+    client.assert(response.status === 200, "Response status is not 200");
+}); %}

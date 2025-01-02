@@ -36,14 +36,20 @@ public class JobServiceJPA implements JobService {
     }
 
     @Override
-    public JobResponse updateJob(JobRequest jobRequest, Long id) {
+    public JobResponse updateJob(JobRequest jobRequest, Long id, Job jobSaved) {
         Job job = new Job();
 
+        job.setId(id);
         job.setTitle(jobRequest.getTitle());
         job.setDescription(jobRequest.getDescription());
         job.setRequirements(jobRequest.getRequirements());
         job.setBenefits(jobRequest.getBenefits());
+        job.setCreatedAt(jobRequest.getCreatedAt());
         job.setActive(jobRequest.isActive());
+        job.setPublishDate(jobSaved.getPublishDate());
+        job.setExpirationDate(jobSaved.getExpirationDate());
+        job.setAccount(jobSaved.getAccount());
+        job.setRequiredSkills(jobSaved.getRequiredSkills());
 
         Job updatedJob = jobRepository.save(job);
 

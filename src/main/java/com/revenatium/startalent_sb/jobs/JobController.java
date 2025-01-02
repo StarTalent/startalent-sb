@@ -1,5 +1,6 @@
 package com.revenatium.startalent_sb.jobs;
 
+import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.RestController;
 import org.springframework.data.domain.Page;
@@ -33,7 +34,18 @@ public class JobController {
         return ResponseEntity.ok(jobsPage);
     }
 
+    @GetMapping("/{id}")
+    public ResponseEntity<JobResponse> getJob(@PathVariable Long id) {
+        Optional<Job> job = jobRepository.findById(id);
+        if (job.isEmpty()) {
+            return ResponseEntity.status(HttpStatus.NOT_FOUND).build();
+        }
+        JobResponse jobResponse = JobMapper.toResponse(job.get());
+        return ResponseEntity.ok(jobResponse);
+    }
 
+
+    @PreAuthorize("hasRole('ADMIN')")
     @PostMapping
     public ResponseEntity<JobResponse> addJob(@RequestBody JobRequest jobRequest) {
         JobResponse jobResponse = jobService.addJob(jobRequest);
@@ -43,6 +55,7 @@ public class JobController {
         return ResponseEntity.created(location).body(jobResponse);
     }
 
+    @PreAuthorize("hasRole('ADMIN')")
     @PutMapping("/{id}")
     public ResponseEntity<?> updateJob(@RequestBody JobRequest jobRequest, @PathVariable Long id) {
         Optional<Job> job = jobRepository.findById(id);
@@ -51,10 +64,11 @@ public class JobController {
             return ResponseEntity.status(HttpStatus.NOT_FOUND)
                 .body("No se encontró el registro con el ID: " + id);
         }
-        jobService.updateJob(jobRequest, id);
+        jobService.updateJob(jobRequest, id, job.get());
         return ResponseEntity.noContent().build();
     }
 
+    @PreAuthorize("hasRole('ADMIN')")
     @DeleteMapping("/{id}")
     public ResponseEntity<?> deleteJob(@PathVariable Long id) {
         Optional<Job> job = jobRepository.findById(id);

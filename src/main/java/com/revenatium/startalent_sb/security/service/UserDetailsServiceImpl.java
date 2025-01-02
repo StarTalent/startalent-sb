@@ -3,7 +3,6 @@ package com.revenatium.startalent_sb.security.service;
 import com.revenatium.startalent_sb.users.User;
 import com.revenatium.startalent_sb.users.UserRepository;
 import jakarta.transaction.Transactional;
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.core.GrantedAuthority;
 import org.springframework.security.core.authority.SimpleGrantedAuthority;
 import org.springframework.security.core.userdetails.UserDetails;

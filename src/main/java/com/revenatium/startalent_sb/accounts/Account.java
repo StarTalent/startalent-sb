@@ -1,11 +1,7 @@
 package com.revenatium.startalent_sb.accounts;
 
-import com.fasterxml.jackson.annotation.JsonIgnore;
 import com.fasterxml.jackson.databind.JsonNode;
 import com.revenatium.startalent_sb.config.tenant.TenantAbstractBaseEntity;
-import com.revenatium.startalent_sb.jobs.Job;
-import com.revenatium.startalent_sb.roles.Role;
-import com.revenatium.startalent_sb.users.User;
 import com.revenatium.startalent_sb.utils.JsonNodeConverter;
 import jakarta.persistence.*;
 import jakarta.validation.constraints.NotBlank;
@@ -15,7 +11,6 @@ import org.springframework.data.annotation.LastModifiedDate;
 import org.springframework.data.jpa.domain.support.AuditingEntityListener;
 
 import java.time.LocalDateTime;
-import java.util.List;
 
 @AllArgsConstructor
 @NoArgsConstructor
@@ -59,7 +54,6 @@ public class Account extends TenantAbstractBaseEntity {
     @PrePersist
     private void prePersist() {
         this.createdAt = LocalDateTime.now();
-        this.updatedAt = LocalDateTime.now();
     }
 
     @PreUpdate

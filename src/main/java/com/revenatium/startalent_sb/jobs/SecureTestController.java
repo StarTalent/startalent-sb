@@ -5,7 +5,7 @@ import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.RestController;
 
 @RestController
-public class JobTestController {
+public class SecureTestController {
 
     @GetMapping("/jobs")
     public String hello() {

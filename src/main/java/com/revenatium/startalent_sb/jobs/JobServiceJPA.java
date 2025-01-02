@@ -7,11 +7,9 @@ import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
 
-
 @Service
 @Primary
 public class JobServiceJPA implements JobService {
-
     private final JobRepository jobRepository;
     private final AccountRepository accountRepository;
 
@@ -57,5 +55,4 @@ public class JobServiceJPA implements JobService {
 
         jobRepository.deleteById(id);
     }
-
 }

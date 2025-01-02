@@ -1,7 +1,6 @@
 package com.revenatium.startalent_sb.userRole;
 
 import com.fasterxml.jackson.annotation.JsonIgnore;
-import com.revenatium.startalent_sb.accounts.Account;
 import com.revenatium.startalent_sb.config.tenant.TenantAbstractBaseEntity;
 import com.revenatium.startalent_sb.roles.Role;
 import com.revenatium.startalent_sb.users.User;
@@ -64,7 +63,6 @@ public class UserRole extends TenantAbstractBaseEntity {
     @PrePersist
     private void prePersist() {
         this.assignedAt = LocalDateTime.now();
-        this.updatedAt = LocalDateTime.now();
     }
 
     @PreUpdate

@@ -1,4 +1,4 @@
-package com.revenatium.startalent_sb.controller;
+package com.revenatium.startalent_sb.jobs;
 
 import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.web.bind.annotation.GetMapping;

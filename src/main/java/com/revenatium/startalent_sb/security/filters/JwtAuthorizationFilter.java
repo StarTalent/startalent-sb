@@ -1,5 +1,6 @@
 package com.revenatium.startalent_sb.security.filters;
 
+import com.revenatium.startalent_sb.config.tenant.TenantContext;
 import com.revenatium.startalent_sb.security.jwt.JwtUtils;
 import com.revenatium.startalent_sb.security.service.UserDetailsServiceImpl;
 import jakarta.servlet.FilterChain;
@@ -32,6 +33,11 @@ public class JwtAuthorizationFilter extends OncePerRequestFilter {
                                     @NonNull HttpServletResponse response,
                                     @NonNull FilterChain filterChain) throws ServletException, IOException {
         String authorizationHeader = request.getHeader("Authorization");
+        String account = request.getHeader("account");
+        if (account == null) {
+            throw new RuntimeException("Account not found");
+        }
+        TenantContext.setTenantId(account);
 
         if (authorizationHeader != null && authorizationHeader.startsWith("Bearer ")) {
             String token = authorizationHeader.substring(7);

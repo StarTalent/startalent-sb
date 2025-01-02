@@ -8,4 +8,29 @@ account: {{tenant}}
   "passwordHash": "{{password}}"
 }
 
-###
+> {% client.global.set("token", response.body.token); %}
+
+### saludo
+GET {{url}}/jobs
+account: {{tenant}}
+Authorization: Bearer {{token}}
+
+### lista de jobs accesibles por el admin
+GET {{url}}/jobsAccessAdmin
+account: {{tenant}}
+Authorization: Bearer {{token}}
+
+### lista de jobs accesibles por el user
+GET {{url}}/jobsAccessUser
+account: {{tenant}}
+Authorization: Bearer {{token}}
+
+### lista de jobs accesibles por el admin o el user
+GET {{url}}/jobsAccessAdminOrUser
+account: {{tenant}}
+Authorization: Bearer {{token}}
+
+### lista de jobs accesibles por el admin o el user
+GET {{url}}/jobsAccessAdminT
+account: {{tenant}}
+Authorization: Bearer {{token}}

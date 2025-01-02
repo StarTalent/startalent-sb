@@ -25,8 +25,11 @@ public class UserDetailsServiceImpl implements UserDetailsService {
     @Transactional
     public UserDetails loadUserByUsername(String username) throws UsernameNotFoundException {
 
-        User user = (User) userRepository.findByEmail(username)
-                .orElseThrow(() -> new UsernameNotFoundException("No se encontró el usuario" + username));
+        User user = userRepository.findOneByEmailOptimized(username);
+
+        if (user == null) {
+            throw new UsernameNotFoundException("No se encontró el usuario: " + username);
+        }
 
 
         Collection<? extends GrantedAuthority> authorities = user.getUserRoles()

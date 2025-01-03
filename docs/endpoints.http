@@ -10,6 +10,18 @@ account: {{tenant}}
 
 > {% client.global.set("token", response.body.token); %}
 
+### Login de usuario normal
+POST {{url}}/login
+Content-Type: application/json
+account: {{tenant}}
+
+{
+  "email": "usuario6@ejemplo.com",
+  "passwordHash": "contraseña123"
+}
+
+> {% client.global.set("token", response.body.token); %}
+
 ### saludo
 GET {{url}}/jobs
 account: {{tenant}}
@@ -114,3 +126,27 @@ Authorization: Bearer {{token}}
 > {% client.test("Request executed successfully", function () {
     client.assert(response.status === 200, "Response status is not 200");
 }); %}
+
+###  Registro de usuario
+POST {{url}}/api/v1/users/register
+Content-Type: application/json
+account: {{tenant}}
+
+{
+    "email": "usuario7@ejemplo.com",
+    "password": "contraseña123",
+    "firstName": "Juan",
+    "lastName": "Pérez"
+}
+
+###  Ver perfil (usuario normal)
+GET {{url}}/api/v1/users/profile/11
+Content-Type: application/json
+account: {{tenant}}
+Authorization: Bearer {{token}}
+
+###  Ver perfil (admin con impersonación)
+GET {{url}}/api/v1/users/profile/11?impersonate=true
+Content-Type: application/json
+account: {{tenant}}
+Authorization: Bearer {{token}}

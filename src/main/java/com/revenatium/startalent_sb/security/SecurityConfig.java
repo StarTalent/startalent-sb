@@ -6,6 +6,7 @@ import com.revenatium.startalent_sb.security.jwt.JwtUtils;
 import com.revenatium.startalent_sb.security.service.UserDetailsServiceImpl;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
+import org.springframework.http.HttpMethod;
 import org.springframework.security.authentication.AuthenticationManager;
 import org.springframework.security.config.annotation.authentication.builders.AuthenticationManagerBuilder;
 import org.springframework.security.config.annotation.method.configuration.EnableMethodSecurity;
@@ -48,7 +49,9 @@ public class SecurityConfig {
         return httpSecurity
                 .csrf(AbstractHttpConfigurer::disable)
                 .authorizeHttpRequests(auth -> {
-                    auth.requestMatchers("/api/v1/**").permitAll();
+                    auth.requestMatchers(HttpMethod.POST,"/api/v1/users/register").permitAll();
+                    auth.requestMatchers(HttpMethod.GET, "/api/v1/jobs").permitAll();
+                    auth.requestMatchers(HttpMethod.GET, "/api/v1/jobs/{id}").permitAll();
                     auth.anyRequest().authenticated();
                 })
                 .sessionManagement(session -> session.sessionCreationPolicy(STATELESS))

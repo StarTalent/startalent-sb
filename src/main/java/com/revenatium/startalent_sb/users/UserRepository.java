@@ -18,6 +18,7 @@ public interface UserRepository extends JpaRepository<User, Long> {
     """)
     Optional<User> findByIdWithRoles(@Param("id") Long id);
 
+    Optional<User> findOneById(Long id);
 
     Optional <User> findOneByEmail(String email);
 

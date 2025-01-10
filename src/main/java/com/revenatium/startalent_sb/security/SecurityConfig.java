@@ -52,6 +52,7 @@ public class SecurityConfig {
                     auth.requestMatchers(HttpMethod.POST,"/api/v1/users/register").permitAll();
                     auth.requestMatchers(HttpMethod.GET, "/api/v1/jobs").permitAll();
                     auth.requestMatchers(HttpMethod.GET, "/api/v1/jobs/{id}").permitAll();
+                    auth.requestMatchers("/api/v1/candidates/**").permitAll();
                     auth.anyRequest().authenticated();
                 })
                 .sessionManagement(session -> session.sessionCreationPolicy(STATELESS))
